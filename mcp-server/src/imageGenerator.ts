@@ -101,57 +101,55 @@ export class ImageGenerator {
     await Promise.all(previewPromises);
   }
 
-    static validateAuthentication(): AuthConfig {
-        const project = process.env.GOOGLE_CLOUD_PROJECT || '';
-        const location = process.env.GOOGLE_CLOUD_LOCATION || '';
-        const vertexai = process.env.GOOGLE_GENAI_USE_VERTEXAI === 'true';
-        const auth: AuthConfig = {project, location, vertexai, apiKey: ''};
-
-        const nanoKey = process.env.NANOBANANA_API_KEY;
-        if (nanoKey) {
-            console.error('✓ Found NANOBANANA_API_KEY environment variable');
-            auth.apiKey = nanoKey;
-            return auth;
-        }
-
-        const nanoGeminiKey = process.env.NANOBANANA_GEMINI_API_KEY;
-        if (nanoGeminiKey) {
-            console.error('✓ Found NANOBANANA_GEMINI_API_KEY environment variable (fallback)');
-            auth.apiKey = nanoGeminiKey;
-            return auth;
-        }
-
-        const nanoGoogleKey = process.env.NANOBANANA_GOOGLE_API_KEY;
-        if (nanoGoogleKey) {
-            console.error('✓ Found NANOBANANA_GOOGLE_API_KEY environment variable (fallback)');
-            auth.apiKey = nanoGoogleKey;
-            return auth;
-        }
-
-        const geminiKey = process.env.GEMINI_API_KEY;
-        if (geminiKey) {
-            console.error(
-                '✓ Found GEMINI_API_KEY environment variable (fallback)',
-            );
-            auth.apiKey = geminiKey;
-            return auth;
-        }
-
-        const googleKey = process.env.GOOGLE_API_KEY;
-        if (googleKey) {
-            console.error(
-                '✓ Found GOOGLE_API_KEY environment variable (fallback)',
-            );
-            auth.apiKey = googleKey;
-            return auth;
-        }
-
-        throw new Error(
-            'ERROR: No valid API key found. Please set NANOBANANA_API_KEY environment variable.\n' +
-            'Fallback variables: NANOBANANA_GEMINI_API_KEY, NANOBANANA_GOOGLE_API_KEY, GEMINI_API_KEY, GOOGLE_API_KEY.\n' +
-            'For more details on authentication, visit: https://geminicli.com/docs/get-started/authentication/',
-        );
+  static validateAuthentication(): AuthConfig {
+    const nanoKey = process.env.NANOBANANA_API_KEY;
+    if (nanoKey) {
+      console.error('✓ Found NANOBANANA_API_KEY environment variable');
+      return {project: '', location: '', vertexai: false, apiKey: nanoKey};
     }
+    const project = process.env.GOOGLE_CLOUD_PROJECT || '';
+    const location = process.env.GOOGLE_CLOUD_LOCATION || '';
+    const vertexai = process.env.GOOGLE_GENAI_USE_VERTEXAI === 'true';
+    const auth: AuthConfig = {project, location, vertexai, apiKey: ''};
+
+    const nanoGeminiKey = process.env.NANOBANANA_GEMINI_API_KEY;
+    if (nanoGeminiKey) {
+      console.error('✓ Found NANOBANANA_GEMINI_API_KEY environment variable (fallback)');
+      auth.apiKey = nanoGeminiKey;
+      return auth;
+    }
+
+    const nanoGoogleKey = process.env.NANOBANANA_GOOGLE_API_KEY;
+    if (nanoGoogleKey) {
+      console.error('✓ Found NANOBANANA_GOOGLE_API_KEY environment variable (fallback)');
+      auth.apiKey = nanoGoogleKey;
+      return auth;
+    }
+
+    const geminiKey = process.env.GEMINI_API_KEY;
+    if (geminiKey) {
+      console.error(
+          '✓ Found GEMINI_API_KEY environment variable (fallback)',
+      );
+      auth.apiKey = geminiKey;
+      return auth;
+    }
+
+    const googleKey = process.env.GOOGLE_API_KEY;
+    if (googleKey) {
+      console.error(
+          '✓ Found GOOGLE_API_KEY environment variable (fallback)',
+      );
+      auth.apiKey = googleKey;
+      return auth;
+    }
+
+    throw new Error(
+        'ERROR: No valid API key found. Please set NANOBANANA_API_KEY environment variable.\n' +
+        'Fallback variables: NANOBANANA_GEMINI_API_KEY, NANOBANANA_GOOGLE_API_KEY, GEMINI_API_KEY, GOOGLE_API_KEY.\n' +
+        'For more details on authentication, visit: https://geminicli.com/docs/get-started/authentication/',
+    );
+  }
 
   private isValidBase64ImageData(data: string): boolean {
     // Check if data looks like base64 image data
