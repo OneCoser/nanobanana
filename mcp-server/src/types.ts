@@ -29,6 +29,9 @@ export interface ImageGenerationResponse {
 
 export interface AuthConfig {
   apiKey: string;
+  vertexai: boolean;
+  project: string;
+  location: string;
 }
 
 export interface FileSearchResult {
