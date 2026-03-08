@@ -9,13 +9,5 @@
       "env": {}
     }
   },
-  "contextFileName": "GEMINI.md",
-  "settings": [
-    {
-      "name": "API Key",
-      "description": "Your Gemini API key. Get one from https://aistudio.google.com/apikey.",
-      "envVar": "NANOBANANA_API_KEY",
-      "sensitive": true
-    }
-  ]
+  "contextFileName": "GEMINI.md"
 }
